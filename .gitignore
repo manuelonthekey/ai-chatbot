@@ -1,0 +1,24 @@
+# ---- Build output ----
+target/
+
+# ---- IDE ----
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Maven ----
+.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+
+# ---- Environment / Secrets ----
+.env
+*.env
+application-local.properties

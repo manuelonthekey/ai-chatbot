@@ -1,0 +1,136 @@
+[
+  {
+    "intent": "greeting",
+    "patterns": [
+      "hello",
+      "hi",
+      "hey",
+      "good morning",
+      "good afternoon",
+      "howdy",
+      "hi there",
+      "what is up",
+      "greetings"
+    ],
+    "responses": [
+      "Hello there! How can I help you today?",
+      "Hi! What can I do for you?",
+      "Greetings! How may I assist you?"
+    ]
+  },
+  {
+    "intent": "goodbye",
+    "patterns": [
+      "bye",
+      "goodbye",
+      "see you later",
+      "farewell",
+      "catch you later",
+      "talk later",
+      "take care",
+      "good night",
+      "see ya"
+    ],
+    "responses": [
+      "Goodbye! Have a great day!",
+      "See you later!",
+      "Farewell! Feel free to reach out if you need anything else."
+    ]
+  },
+  {
+    "intent": "pricing",
+    "patterns": [
+      "how much does it cost",
+      "what is the price",
+      "pricing details",
+      "how much is the subscription",
+      "is it free",
+      "cost of the plan",
+      "what are your rates",
+      "tell me about pricing",
+      "subscription fee",
+      "monthly cost"
+    ],
+    "responses": [
+      "We offer a free tier, as well as premium plans starting at $9.99/month.",
+      "Our basic features are free to use. For advanced features, please check our pricing page."
+    ]
+  },
+  {
+    "intent": "support",
+    "patterns": [
+      "i need help",
+      "support",
+      "can someone help me",
+      "contact support",
+      "i have an issue",
+      "something is broken",
+      "report a bug",
+      "i have a problem",
+      "technical assistance",
+      "my account is not working"
+    ],
+    "responses": [
+      "You can reach our support team at support@example.com or call 1-800-123-4567.",
+      "Please visit our Help Center or email us at support@example.com for further assistance."
+    ]
+  },
+  {
+    "intent": "hours",
+    "patterns": [
+      "what are your hours",
+      "when are you open",
+      "business hours",
+      "what time do you close",
+      "are you open now",
+      "opening time",
+      "closing time",
+      "when can i contact you"
+    ],
+    "responses": [
+      "We are available Monday to Friday, 9 AM to 6 PM (EST).",
+      "Our support team operates from 9 AM to 6 PM on weekdays."
+    ]
+  },
+  {
+    "intent": "about",
+    "patterns": [
+      "who are you",
+      "what are you",
+      "what can you do",
+      "tell me about yourself",
+      "what is this chatbot",
+      "how do you work",
+      "what is your purpose",
+      "are you a bot",
+      "are you human"
+    ],
+    "responses": [
+      "I am an AI Assistant here to help you with questions about our services!",
+      "I'm a smart chatbot designed to answer your questions quickly and accurately."
+    ]
+  },
+  {
+    "intent": "unknown",
+    "patterns": [
+      "asdfghjkl",
+      "random stuff here",
+      "xyz abc test",
+      "what is the capital of france",
+      "who is the best player",
+      "tell me a joke",
+      "how is the weather",
+      "what time is it",
+      "sports news",
+      "movie recommendations",
+      "play music",
+      "translate this",
+      "general knowledge question"
+    ],
+    "responses": [
+      "I'm sorry, I can only answer questions about our services. For anything else, please contact support.",
+      "That's outside my area of expertise! I'm best at answering questions about our pricing, support, and services.",
+      "I'm not sure how to help with that. Try asking about pricing, support hours, or our services!"
+    ]
+  }
+]
