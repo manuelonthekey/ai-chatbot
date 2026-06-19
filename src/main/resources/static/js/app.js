@@ -1,10 +1,7 @@
 let stompClient = null;
 let typingRow = null;
-let chatId = localStorage.getItem('javagpt_chatId');
-if (!chatId) {
-    chatId = crypto.randomUUID();
-    localStorage.setItem('javagpt_chatId', chatId);
-}
+// sessionId is assigned by the server after STOMP CONNECT — unique per tab/connection
+let sessionId = null;
 
 const viewport      = document.getElementById('messages-viewport');
 const messagesInner = document.getElementById('messages-inner');
@@ -22,13 +19,30 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.debug = null;
 
-    stompClient.connect({ 'chatId': chatId }, function () {
+    stompClient.connect({}, function (frame) {
         setStatus(true);
         sendBtn.disabled = false;
 
-        stompClient.subscribe('/topic/replies-' + chatId, function (frame) {
+        // Extract the STOMP session ID assigned by the server
+        sessionId = stompClient.ws._transport && stompClient.ws._transport.url
+            ? extractSessionId(stompClient.ws._transport.url)
+            : null;
+
+        // Fallback: get sessionId from CONNECTED frame headers
+        if (!sessionId && frame.headers && frame.headers['session']) {
+            sessionId = frame.headers['session'];
+        }
+
+        if (!sessionId) {
+            // Last resort: generate a random ID for this tab
+            sessionId = crypto.randomUUID();
+        }
+
+        console.log('[JavaGPT] Session ID:', sessionId);
+
+        stompClient.subscribe('/topic/replies-' + sessionId, function (msg) {
             removeTypingIndicator();
-            const data = JSON.parse(frame.body);
+            const data = JSON.parse(msg.body);
             appendMessage('bot', data.content);
             setInputLocked(false);
         });
@@ -37,6 +51,13 @@ function connect() {
         sendBtn.disabled = true;
         setTimeout(connect, 5000);
     });
+}
+
+/* ── Extract SockJS sessionId from URL ── */
+function extractSessionId(url) {
+    // SockJS URLs look like: /chat-websocket/{serverId}/{sessionId}/websocket
+    const match = url && url.match(/\/chat-websocket\/[^\/]+\/([^\/]+)\//); 
+    return match ? match[1] : null;
 }
 
 /* ── Status indicator ── */
@@ -53,13 +74,14 @@ function setStatus(online) {
 /* ── Send message ── */
 function sendMessage() {
     const text = input.value.trim();
-    if (!text || !stompClient) return;
+    if (!text || !stompClient || !sessionId) return;
 
     appendMessage('user', text);
     setInputLocked(true);
     showTypingIndicator();
 
-    stompClient.send('/app/message', {}, JSON.stringify({ content: text, sender: 'User' }));
+    // Send sessionId in the STOMP message header so the server can route the reply
+    stompClient.send('/app/message', { 'sessionId': sessionId }, JSON.stringify({ content: text, sender: 'User' }));
     input.value = '';
     autoResize();
 }
