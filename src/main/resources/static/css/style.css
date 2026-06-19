@@ -698,10 +698,6 @@ body {
         font-size: 0.95rem;
     }
 
-    /* Show the backdrop on mobile */
-    .sidebar-backdrop {
-        display: block;
-    }
 }
 
 /* ── Very small screens (≤ 400px) ── */
