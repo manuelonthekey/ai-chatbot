@@ -1,5 +1,10 @@
 let stompClient = null;
 let typingRow = null;
+let chatId = localStorage.getItem('javagpt_chatId');
+if (!chatId) {
+    chatId = crypto.randomUUID();
+    localStorage.setItem('javagpt_chatId', chatId);
+}
 
 const viewport      = document.getElementById('messages-viewport');
 const messagesInner = document.getElementById('messages-inner');
@@ -17,11 +22,11 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.debug = null;
 
-    stompClient.connect({}, function () {
+    stompClient.connect({ 'chatId': chatId }, function () {
         setStatus(true);
         sendBtn.disabled = false;
 
-        stompClient.subscribe('/topic/replies', function (frame) {
+        stompClient.subscribe('/topic/replies-' + chatId, function (frame) {
             removeTypingIndicator();
             const data = JSON.parse(frame.body);
             appendMessage('bot', data.content);
@@ -172,6 +177,38 @@ document.addEventListener('click', function (e) {
         && e.target !== sidebarToggle) {
         sidebar.classList.remove('open');
     }
+});
+
+/* ── Theme Toggle ── */
+const themeToggleBtn = document.getElementById('theme-toggle');
+const iconMoon       = document.getElementById('theme-icon-moon');
+const iconSun        = document.getElementById('theme-icon-sun');
+const htmlEl         = document.documentElement;
+
+function applyTheme(dark) {
+    if (dark) {
+        htmlEl.setAttribute('data-theme', 'dark');
+        iconMoon.style.display = 'none';
+        iconSun.style.display  = 'block';
+    } else {
+        htmlEl.removeAttribute('data-theme');
+        iconMoon.style.display = 'block';
+        iconSun.style.display  = 'none';
+    }
+}
+
+// Restore saved preference (default: light)
+const savedTheme = localStorage.getItem('javagpt-theme');
+applyTheme(savedTheme === 'dark');
+
+themeToggleBtn.addEventListener('click', function () {
+    const isDark = htmlEl.getAttribute('data-theme') === 'dark';
+    applyTheme(!isDark);
+    localStorage.setItem('javagpt-theme', !isDark ? 'dark' : 'light');
+
+    // Brief spin animation
+    themeToggleBtn.classList.add('toggling');
+    setTimeout(() => themeToggleBtn.classList.remove('toggling'), 400);
 });
 
 connect();

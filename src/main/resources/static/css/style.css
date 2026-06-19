@@ -4,6 +4,7 @@
    ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/digital-7-mono');
 
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,7 +18,7 @@
     --teal-600: #0F9D8E;
     --teal-700: #0c7a6d;
 
-    /* Neutrals */
+    /* Neutrals – light mode */
     --gray-50:  #f8fafb;
     --gray-100: #f1f4f5;
     --gray-200: #e4e9eb;
@@ -27,15 +28,29 @@
     --gray-800: #1e2c31;
     --gray-900: #111a1d;
 
-    /* Surfaces */
-    --sidebar-bg:  #f0faf9;
-    --chat-bg:     #ffffff;
-    --input-bg:    #ffffff;
+    /* Surfaces – light mode */
+    --sidebar-bg:      #f0faf9;
+    --chat-bg:         #ffffff;
+    --input-bg:        #ffffff;
+    --topbar-bg:       #ffffff;
+    --inputbar-bg:     #ffffff;
+    --border-color:    var(--gray-200);
+    --text-primary:    var(--gray-800);
+    --text-secondary:  var(--gray-400);
+    --text-muted:      var(--gray-300);
 
     /* Message bubbles */
-    --bot-bubble-bg:  #ffffff;
-    --user-bubble-bg: linear-gradient(135deg, #3DD6C8 0%, #0F9D8E 100%);
+    --bot-bubble-bg:   #ffffff;
+    --bot-bubble-border: var(--gray-200);
+    --bot-bubble-text: var(--gray-800);
+    --user-bubble-bg:  linear-gradient(135deg, #3DD6C8 0%, #0F9D8E 100%);
     --user-bubble-text: #ffffff;
+
+    /* Input field */
+    --input-field-bg:  var(--gray-50);
+    --input-field-border: var(--gray-200);
+    --input-text:      var(--gray-800);
+    --placeholder-color: var(--gray-300);
 
     /* Shadows */
     --shadow-sm:  0 1px 4px rgba(0,0,0,0.07);
@@ -53,8 +68,52 @@
     --radius-sm: 8px;
 }
 
-html, body { height: 100%; overflow: hidden; background: var(--gray-100); }
-body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-height: 1.55; }
+/* ── Dark Mode – grey + dark teal (no black) ── */
+[data-theme="dark"] {
+    --teal-100: #0d2e2b;
+    --teal-200: #14403b;
+    --teal-400: #2bbfb2;
+    --teal-500: #22a89c;
+    --teal-600: #1a8f85;
+    --teal-700: #137068;
+
+    --gray-50:  #2e3638;
+    --gray-100: #262e30;
+    --gray-200: #3a4447;
+    --gray-300: #4e5c60;
+    --gray-400: #7a9098;
+    --gray-600: #a8bec5;
+    --gray-800: #dce8eb;
+    --gray-900: #ecf3f5;
+
+    --sidebar-bg:      #232c2e;
+    --chat-bg:         #2a3335;
+    --input-bg:        #2a3335;
+    --topbar-bg:       #232c2e;
+    --inputbar-bg:     #232c2e;
+    --border-color:    #3a4447;
+    --text-primary:    #dce8eb;
+    --text-secondary:  #7a9098;
+    --text-muted:      #4e5c60;
+
+    --bot-bubble-bg:   #313d3f;
+    --bot-bubble-border: #3a4447;
+    --bot-bubble-text: #dce8eb;
+    --user-bubble-bg:  linear-gradient(135deg, #1a8f85 0%, #0c5e56 100%);
+    --user-bubble-text: #e8f8f7;
+
+    --input-field-bg:  #313d3f;
+    --input-field-border: #3a4447;
+    --input-text:      #dce8eb;
+    --placeholder-color: #4e5c60;
+
+    --shadow-sm:  0 1px 4px rgba(0,0,0,0.25);
+    --shadow-md:  0 4px 16px rgba(0,0,0,0.35);
+    --shadow-msg: 0 2px 8px rgba(0,0,0,0.30);
+}
+
+html, body { height: 100%; overflow: hidden; background: var(--chat-bg); transition: background 0.3s ease, color 0.3s ease; }
+body { font-family: var(--font); color: var(--text-primary); font-size: 15px; line-height: 1.55; }
 
 /* ── App Shell ── */
 .app-shell {
@@ -180,10 +239,11 @@ body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-h
     align-items: center;
     gap: 14px;
     padding: 0 24px;
-    border-bottom: 1px solid var(--gray-200);
-    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--topbar-bg);
     box-shadow: var(--shadow-sm);
     z-index: 10;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sidebar-toggle {
@@ -307,9 +367,10 @@ body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-h
 /* Bot bubble */
 .message-row.bot .message-bubble {
     background: var(--bot-bubble-bg);
-    color: var(--gray-800);
+    color: var(--bot-bubble-text);
     border-bottom-left-radius: 4px;
-    border: 1px solid var(--gray-200);
+    border: 1px solid var(--bot-bubble-border);
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* User bubble */
@@ -363,12 +424,13 @@ body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-h
 /* ── Input bar ── */
 .input-bar-wrapper {
     padding: 16px 24px 12px;
-    border-top: 1px solid var(--gray-200);
-    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    background: var(--inputbar-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .input-bar {
@@ -377,11 +439,11 @@ body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-h
     display: flex;
     align-items: flex-end;
     gap: 10px;
-    background: var(--gray-50);
-    border: 1.5px solid var(--gray-200);
+    background: var(--input-field-bg);
+    border: 1.5px solid var(--input-field-border);
     border-radius: 16px;
     padding: 10px 10px 10px 18px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.3s ease;
 }
 .input-bar:focus-within {
     border-color: var(--teal-400);
@@ -395,12 +457,13 @@ body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-h
     outline: none;
     font-size: 0.96rem;
     font-family: var(--font);
-    color: var(--gray-800);
+    color: var(--input-text);
     resize: none;
     max-height: 160px;
     line-height: 1.5;
+    transition: color 0.3s ease;
 }
-#message-input::placeholder { color: var(--gray-300); }
+#message-input::placeholder { color: var(--placeholder-color); }
 
 #send-button {
     width: 40px; height: 40px;
@@ -421,8 +484,36 @@ body { font-family: var(--font); color: var(--gray-800); font-size: 15px; line-h
 
 .input-hint {
     font-size: 0.72rem;
-    color: var(--gray-300);
+    color: var(--text-muted);
     text-align: center;
+}
+
+/* ── Theme Toggle Button ── */
+#theme-toggle {
+    background: var(--input-field-bg);
+    border: 1.5px solid var(--border-color);
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 36px;
+    color: var(--text-secondary);
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+    flex-shrink: 0;
+}
+#theme-toggle:hover {
+    background: var(--teal-100);
+    border-color: var(--teal-400);
+    color: var(--teal-600);
+    transform: scale(1.08);
+}
+#theme-toggle svg {
+    transition: transform 0.4s ease;
+}
+#theme-toggle.toggling svg {
+    transform: rotate(180deg);
 }
 
 /* ── Scrollbar ── */
