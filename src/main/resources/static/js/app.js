@@ -11,6 +11,7 @@ const statusDot     = document.getElementById('status-dot');
 const statusLabel   = document.getElementById('status-label');
 const sidebarToggle = document.getElementById('sidebar-toggle');
 const sidebar       = document.querySelector('.sidebar');
+const backdrop      = document.getElementById('sidebar-backdrop');
 const newChatBtn    = document.getElementById('new-chat-btn');
 
 /* ── WebSocket connection ── */
@@ -177,29 +178,43 @@ input.addEventListener('keydown', function (e) {
 
 input.addEventListener('input', autoResize);
 
+/* ── Sidebar helpers ── */
+function openSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.add('open');
+    if (backdrop) {
+        backdrop.classList.add('visible');
+    }
+}
+function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    if (backdrop) {
+        backdrop.classList.remove('visible');
+    }
+}
+
 if (sidebarToggle && sidebar) {
     sidebarToggle.addEventListener('click', function () {
-        sidebar.classList.toggle('open');
+        if (sidebar.classList.contains('open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
     });
+}
+
+if (backdrop) {
+    backdrop.addEventListener('click', closeSidebar);
 }
 
 if (newChatBtn) {
     newChatBtn.addEventListener('click', function () {
         clearChat();
-        if (window.innerWidth <= 720 && sidebar) sidebar.classList.remove('open');
+        closeSidebar();
         input.focus();
     });
 }
-
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', function (e) {
-    if (sidebar && window.innerWidth <= 720
-        && sidebar.classList.contains('open')
-        && !sidebar.contains(e.target)
-        && e.target !== sidebarToggle) {
-        sidebar.classList.remove('open');
-    }
-});
 
 /* ── Theme Toggle ── */
 const themeToggleBtn = document.getElementById('theme-toggle');
