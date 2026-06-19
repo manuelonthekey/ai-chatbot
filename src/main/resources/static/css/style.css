@@ -294,7 +294,6 @@ body {
 
 /* Sidebar backdrop – mobile overlay */
 .sidebar-backdrop {
-    display: none;
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.35);
@@ -302,10 +301,12 @@ body {
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     opacity: 0;
+    pointer-events: none;  /* invisible & non-blocking by default */
     transition: opacity 0.3s ease;
 }
 .sidebar-backdrop.visible {
     opacity: 1;
+    pointer-events: auto; /* intercept taps only when open */
 }
 
 .topbar-brand {

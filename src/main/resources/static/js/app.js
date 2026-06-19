@@ -65,10 +65,10 @@ function extractSessionId(url) {
 function setStatus(online) {
     if (online) {
         statusDot.classList.add('online');
-        statusLabel.textContent = 'Online';
+        if (statusLabel) statusLabel.textContent = 'Online';
     } else {
         statusDot.classList.remove('online');
-        statusLabel.textContent = 'Reconnecting…';
+        if (statusLabel) statusLabel.textContent = 'Reconnecting…';
     }
 }
 
@@ -144,10 +144,18 @@ function removeTypingIndicator() {
 }
 
 /* ── Helpers ── */
+function isTouchDevice() {
+    return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+}
+
 function setInputLocked(locked) {
-    input.disabled  = locked;
+    input.disabled   = locked;
     sendBtn.disabled = locked;
-    if (!locked) input.focus();
+    // On touch/mobile devices, programmatic focus() blocks the keyboard
+    // from appearing on subsequent taps – only focus on desktop.
+    if (!locked && !isTouchDevice()) {
+        input.focus();
+    }
 }
 
 function scrollToBottom() {
